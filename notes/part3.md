@@ -1,28 +1,54 @@
-We add UserButton to the page.tsx file and uses afterSignOutUrl to redirect to the home page after sign out. its helps to create a better user experience.
+UserButton from Clerk is added inside `page.tsx` to show the authenticated user menu. The `afterSignOutUrl` prop is used to redirect the user to the home page after signing out, which improves overall user experience.
 
-for dark and light mode we can use npm i next-themes to switch between dark and light mode.
+```tsx
+<UserButton afterSignOutUrl="/" />
+```
 
-and for that shadcn-ui helps us to create a theme provider component. 
-we have to make a folder called providers in components folder.and add theme-provider.tsx file in it. and use it in layout.tsx file and wrap it around our app.
- <ThemeProvider
-        attribute="class"
-        defaultTheme="dark"
-        enableSystem = {false}
-        storageKey="xCord-theme"
-        >
-        {children}
-        </ThemeProvider>
+For dark and light mode support, `next-themes` is used. It allows theme switching by adding a class (`dark` or `light`) to the HTML element.
 
-        suppressHydrationWarning these are some important points before using theme provider.
-        1. we have to add suppressHydrationWarning to html tag in layout.tsx file.
-        2. we have to add defaultTheme="dark" to ThemeProvider component.
-        3. we have to add enableSystem = {false} to ThemeProvider component.
-        4. we have to add storageKey="xCord-theme" to ThemeProvider component.
+```bash
+npm i next-themes
+```
 
-to toggle we use it in components we create one file called mode-toggle.tsx
-after all Done it shows error on dropDown menu so we have to add it from shadCn ui so that error goes away.
-and dropDown menu comes in Ui in components folder.and with button component then we have to wrap it in dropdown-menu component.
+shadcn/ui provides a clean way to create a Theme Provider component. A `providers` folder is created inside the `components` directory, and a `theme-provider.tsx` file is added there.
 
-  className={cn(`${font.className} antialiased`,
-          "bg-white dark:bg-[#313338]"
-        )}   doing this important it gives me the actual discord look and feel.
+This ThemeProvider is then used in `layout.tsx` and wraps the entire application so that theme state is available everywhere.
+
+```tsx
+<ThemeProvider
+  attribute="class"
+  defaultTheme="dark"
+  enableSystem={false}
+  storageKey="xCord-theme"
+>
+  {children}
+</ThemeProvider>
+```
+
+Before using the ThemeProvider, some important setup steps are required to avoid hydration issues:
+
+1. Add `suppressHydrationWarning` to the `<html>` tag in `layout.tsx`.
+2. Set `defaultTheme="dark"` so the app loads consistently in dark mode.
+3. Set `enableSystem={false}` to avoid conflicts with system theme.
+4. Add a custom `storageKey` (`xCord-theme`) to persist the selected theme in local storage.
+
+To toggle between dark and light mode, a separate component is created named `mode-toggle.tsx` inside the `components` folder.
+
+After implementing the toggle, a dropdown-related error appears. This is resolved by adding the `dropdown-menu` component from shadcn/ui.
+
+```bash
+npx shadcn@latest add dropdown-menu
+```
+
+The dropdown menu component is placed inside the `components/ui` folder. The toggle button is then wrapped inside the `DropdownMenu` component to properly handle the UI and interactions.
+
+For styling consistency and to achieve a Discord-like look and feel, global class names are applied using the `cn()` utility along with the font class.
+
+```tsx
+className={cn(
+  `${font.className} antialiased`,
+  "bg-white dark:bg-[#313338]"
+)}
+```
+
+This ensures correct font rendering, smooth text, and proper background colors for both light and dark modes, closely matching Discord’s UI appearance.
